@@ -1,0 +1,12 @@
+PROJECT_NAME   = "CONNECT 5 Game"
+PROJECT_BRIEF  = "The game Connect 5 with modes, singleplayer (Human vs AI), localmultiplayer (Human vs Human), multiplayer over network (Human vs Human)."
+CALL_GRAPH = YES
+UML_LOOK = YES
+HAVE_DOT = YES
+EXTRACT_ALL = YES
+GENERATE_LATEX = NO
+HTML_OUTPUT  = doc
+INPUT = ./src/
+RECURSIVE = YES
+EXTRACT_PRIVATE = YES
+IMAGE_PATH = ../
