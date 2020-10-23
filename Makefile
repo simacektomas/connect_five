@@ -5,30 +5,24 @@
 #make doc vytvoří dokumentaci do adresáře <login>/doc. Dokumentaci musíte vytvořit pomocí programu doxygen, berte to jako výhodu a zkuste dokumentaci uplatnit v předmětu TED. Dokumentaci můžete vygenerovat P
 GXX = g++
 
+OBJ = src/obj/CGame.o \
+      src/obj/CGameBoard.o \
+      src/obj/Player.o \
+      src/obj/STurn.o \
+      src/obj/Connection.o \
 
-all: dir compile doc
+all: compile doc
 
-dir:
+src/obj:
 	mkdir -p ./src/obj/
 
-CGame.o: ./src/CGame.hpp ./src/CGame.cpp ./src/Player.hpp ./src/Connection.hpp ./src/STurn.hpp ./src/CGameBoard.cpp 
-	$(GXX) -ggdb -c ./src/CGame.cpp -o ./src/obj/CGame.o 
+src/obj/%.o: src/%.cpp src/%.hpp src/obj
+	$(GXX) -ggdb -c $< -o $@
 
-CGameBoard.o: ./src/CGameBoard.hpp ./src/CGameBoard.cpp ./src/STurn.hpp 
-	$(GXX) -ggdb -c ./src/CGameBoard.cpp -o ./src/obj/CGameBoard.o 
+simactom: $(OBJ)
+	$(GXX) -ggdb $(OBJ) -o $@ -Wall -pedantic -Wno-long-long -O0 -ggdb -lncurses
 
-Player.o: ./src/Player.hpp ./src/Player.cpp ./src/Minimax.cpp ./src/CGameBoard.hpp ./src/STurn.hpp ./src/Minimax.cpp
-	$(GXX) -ggdb -c ./src/Player.cpp -o ./src/obj/Player.o 
-
-STurn.o: ./src/STurn.hpp  ./src/STurn.cpp
-	$(GXX) -ggdb -c ./src/STurn.cpp -o ./src/obj/STurn.o 
-
-Connection.o: ./src/Connection.hpp ./src/Connection.cpp
-	$(GXX) -ggdb -c ./src/Connection.cpp -o ./src/obj/Connection.o 	
-
-compile: dir CGame.o CGameBoard.o Player.o STurn.o Connection.o
-	$(GXX) -ggdb src/obj/CGame.o src/obj/CGameBoard.o src/obj/Player.o src/obj/STurn.o src/obj/Connection.o -o simactom -Wall -pedantic -Wno-long-long -O0 -ggdb -lncurses
-
+compile:  simactom
 run: simactom
 	./simactom
 

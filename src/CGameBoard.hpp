@@ -42,6 +42,14 @@ class CGameBoard
  		\param first - int the player for who the value should be. 
  		\return int the part Value of current configuration
  	*/
+	int Inrow2Value( int inrow, bool blocked_start, bool blocked_end) const;
+	/**
+	*       This function converts the "marks-in-a-row" into a value. This is actually the core of the AI heuristic.
+		\param inrow - int numer of the same marks X or O in a row
+		\param blocked_start - bool the start of the sequence is blocked by opponent/wall
+		\param blocked_end - bool the end of the sequece is blocked by opponent/wall
+		\return int the score for this "marks-in-a-row" configuration.
+	*/
  	int VerticalHorizontal ( int first ) const;
  	/**
  	*	This function can give a value to current configuration of the CGameBoard int Diagonals direction

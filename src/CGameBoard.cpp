@@ -331,10 +331,42 @@ int CGameBoard::Value ( int first, int second ) const
  	globalSum += VerticalHorizontal(first);
 	globalSum += TopLeftBotRight   (first);
 	globalSum += TopRightBotLeft   (first);
+
+	if (globalSum > 32768) { globalSum=32768; }
 	
 	return globalSum/*-Neighbour(second)*/;
 
 }																							/*HEURISTIC THAT GIVE THE CURRENT CONFIGURATION OF BOARD VALUE*/
+/*===================================================================*/
+int CGameBoard::Inrow2Value(int inrow, bool blocked_start, bool blocked_end) const
+{
+	const int max_score=32768;
+	if (blocked_start && blocked_end) {
+		if (inrow>=5) {
+			return max_score;
+		} else {
+			return 0;
+		}
+	} else if (blocked_start || blocked_end) {
+		switch (inrow) {                
+			case 0: return 0;       
+			case 1: return 1;       
+                        case 2: return 2;       
+			case 3: return 4;       
+			case 4: return 128;     
+			default: return max_score;
+		}
+	} else { // both ends open
+		switch (inrow) {                
+			case 0: return 0;       
+			case 1: return 2;       
+			case 2: return 16;      
+			case 3: return 256;    // 162
+			case 4: return 2048;    
+			default: return max_score;
+		}	
+	}
+}
 /*===================================================================*/
 int CGameBoard::VerticalHorizontal ( int first ) const
  {
@@ -385,11 +417,7 @@ int CGameBoard::VerticalHorizontal ( int first ) const
 						}
 					}
 					/* APRICIATING */
-					sum = inrow;
-					if ( k && l ) for ( int i = 0 ; i < inrow ; i++ ) sum*= inrow;
-					if ( (!k && l) || (k && !l) ) for ( int i = 0 ; i < inrow ; i++ ) sum*= inrow/2;
-					if ( !k && !l ) sum = 0;
-					if ( inrow == 5 ) return 5000;
+					sum = Inrow2Value(inrow, !k, !l);
 					globalSum += sum;
 					inrow = 0;
 					sum = 0;
@@ -429,12 +457,7 @@ int CGameBoard::VerticalHorizontal ( int first ) const
 						}
 					}
 					/* APRICIATING */
-					sum1 = inrow1;
-					if ( k && l ) for ( int i = 0 ; i < inrow1 ; i++ ) sum1*= inrow1;
-					if ( (!k && l) || (k && !l) ) for ( int i = 0 ; i < inrow1 ; i++ ) sum1*= inrow1/2;
-					if ( !k && !l ) sum1 = 0;
-					if ( inrow1 == 5 ) return 5000;
-
+					sum1 = Inrow2Value(inrow1, !k, !l);
 					globalSum += sum1;
 					inrow1 = 0;
 					sum1 = 0;
@@ -498,12 +521,7 @@ int CGameBoard::TopLeftBotRight ( int first ) const
 						}
 					}
 					/* APRICIATING */
-					sum = inrow;
-					if ( k && l ) for ( int i = 0 ; i < inrow ; i++ ) sum*= inrow;
-					if ( (!k && l) || (k && !l) ) for ( int i = 0 ; i < inrow ; i++ ) sum*= inrow/2;
-					if ( !k && !l ) sum = 0;
-					if ( inrow == 5 ) return 5000;
-
+					sum = Inrow2Value(inrow, !k, !l);
 					globalSum += sum;
 					inrow = 0;
 					sum = 0;
@@ -547,18 +565,13 @@ int CGameBoard::TopLeftBotRight ( int first ) const
 							}
 						}
 						/* APRICIATING */
-						sum1 = inrow1;
-						if ( k && l ) for ( int i = 0 ; i < inrow1 ; i++ ) sum1*= inrow1;
-						if ( (!k && l) || (k && !l) ) for ( int i = 0 ; i < inrow ; i++ ) sum1*= inrow1/2;
-						if ( !k && !l ) sum1 = 0;
-						if ( inrow1 == 5 ) return 5000;
-	
-							globalSum += sum1;
-							inrow1 = 0;
-							sum1 = 0;
-							originY1 = -1;
-							originX1 = -1;
-						}		
+						sum1 = Inrow2Value(inrow1, !k, !l);
+						globalSum += sum1;
+						inrow1 = 0;
+						sum1 = 0;
+						originY1 = -1;
+						originX1 = -1;
+					}		
 				}
 			}
 	 	}

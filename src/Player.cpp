@@ -155,7 +155,7 @@ STurn MINIMAX::Play ( int FD )
  		//else PopPossibleTurn(m_Board->Last());                                                   /* POPING THE TURN THAT PLAYED OTHER PLAYER */
 
 		/* HERE TO CHANGE THE DIFFICULTY */
- 		if ( m_Board -> Empty () != 0 ) a =  this->Init(4) ;                                     /* CALLING THE INIT OF RECURSIV MINIMAX ALGORIYTHM */
+ 		if ( m_Board -> Empty () != 0 ) a =  this->Init(3) ;                                     /* CALLING THE INIT OF RECURSIV MINIMAX ALGORIYTHM */
  		else a = STurn (15/2,15/2,m_sign);
  		
  		if ( FD != -1 ) write ( FD, &a, sizeof ( a ));
